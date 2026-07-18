@@ -1,0 +1,98 @@
+package b2
+
+import (
+	"math"
+)
+
+// A solid circle shape
+type CircleShape struct {
+	Shape
+	pos Vec2
+}
+
+func MakeCircleShape() CircleShape {
+	return CircleShape{
+		Shape: Shape{
+			shapeType: Circle,
+		},
+	}
+}
+
+func NewCircleShape() *CircleShape {
+	res := MakeCircleShape()
+	return &res
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+func (shape CircleShape) Clone() IShape {
+	clone := NewCircleShape()
+	clone.radius = shape.radius
+	clone.pos = shape.pos
+	return clone
+}
+
+func (shape CircleShape) GetChildCount() int {
+	return 1
+}
+
+func (shape CircleShape) TestPoint(transform Transform, p Vec2) bool {
+	center := Vec2Add(transform.P, RotVec2Mul(transform.Q, shape.pos))
+	d := Vec2Sub(p, center)
+	return Vec2Dot(d, d) <= shape.radius*shape.radius
+}
+
+// Collision Detection in Interactive 3D Environments by Gino van den Bergen
+// From Section 3.1.2
+// x = s + a * r
+// norm(x) = radius
+//
+// @note because the circle is solid, rays that start inside do not hit because the normal is
+// not defined.
+func (shape CircleShape) RayCast(output *RayCastOutput, input RayCastInput, transform Transform, childIndex int) bool {
+
+	position := Vec2Add(transform.P, RotVec2Mul(transform.Q, shape.pos))
+	s := Vec2Sub(input.P1, position)
+	b := Vec2Dot(s, s) - shape.radius*shape.radius
+
+	// Solve quadratic equation.
+	r := Vec2Sub(input.P2, input.P1)
+	c := Vec2Dot(s, r)
+	rr := Vec2Dot(r, r)
+	sigma := c*c - rr*b
+
+	// Check for negative discriminant and short segment.
+	if sigma < 0.0 || rr < epsilon {
+		return false
+	}
+
+	// Find the point of intersection of the line with the circle.
+	a := -(c + math.Sqrt(sigma))
+
+	// Is the intersection point on the segment?
+	if 0.0 <= a && a <= input.MaxFraction*rr {
+		a /= rr
+		output.Fraction = a
+		output.Normal = Vec2Add(s, Vec2MulScalar(a, r))
+		output.Normal.Normalize()
+		return true
+	}
+
+	return false
+}
+
+func (shape CircleShape) ComputeAABB(aabb *AABB, transform Transform, childIndex int) {
+	p := Vec2Add(transform.P, RotVec2Mul(transform.Q, shape.pos))
+	aabb.LowerBound.Set(p.X-shape.radius, p.Y-shape.radius)
+	aabb.UpperBound.Set(p.X+shape.radius, p.Y+shape.radius)
+}
+
+func (shape CircleShape) ComputeMass(massData *MassData, density float64) {
+	massData.Mass = density * pi * shape.radius * shape.radius
+	massData.Center = shape.pos
+
+	// inertia about the local origin
+	massData.I = massData.Mass * (0.5*shape.radius*shape.radius + Vec2Dot(shape.pos, shape.pos))
+}
+
+func (shape CircleShape) Destroy() {}
