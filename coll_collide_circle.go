@@ -4,24 +4,24 @@ func collideCircles(manifold *Manifold, circleA *CircleShape, xfA Transform, cir
 
 	manifold.PointCount = 0
 
-	pA := TransformVec2Mul(xfA, circleA.pos)
-	pB := TransformVec2Mul(xfB, circleB.pos)
+	pA := TransformVec2Mul(xfA, circleA.Pos)
+	pB := TransformVec2Mul(xfB, circleB.Pos)
 
 	d := Vec2Sub(pB, pA)
 	distSqr := Vec2Dot(d, d)
-	rA := circleA.radius
-	rB := circleB.radius
+	rA := circleA.Radius
+	rB := circleB.Radius
 	radius := rA + rB
 	if distSqr > radius*radius {
 		return
 	}
 
 	manifold.Type = Circles
-	manifold.LocalPoint = circleA.pos
+	manifold.LocalPoint = circleA.Pos
 	manifold.LocalNormal.SetZero()
 	manifold.PointCount = 1
 
-	manifold.Points[0].LocalPoint = circleB.pos
+	manifold.Points[0].LocalPoint = circleB.Pos
 	manifold.Points[0].Id.SetKey(0)
 }
 
@@ -30,13 +30,13 @@ func collidePolygonAndCircle(manifold *Manifold, polygonA *PolygonShape, xfA Tra
 	manifold.PointCount = 0
 
 	// Compute circle position in the frame of the polygon.
-	c := TransformVec2Mul(xfB, circleB.pos)
+	c := TransformVec2Mul(xfB, circleB.Pos)
 	cLocal := TransformVec2MulT(xfA, c)
 
 	// Find the min separating edge.
 	normalIndex := 0
 	separation := -maxFloat
-	radius := polygonA.radius + circleB.radius
+	radius := polygonA.Radius + circleB.Radius
 	vertexCount := polygonA.Count
 	vertices := polygonA.Vertices
 	normals := polygonA.Normals
@@ -71,7 +71,7 @@ func collidePolygonAndCircle(manifold *Manifold, polygonA *PolygonShape, xfA Tra
 		manifold.Type = FaceA
 		manifold.LocalNormal = normals[normalIndex]
 		manifold.LocalPoint = Vec2MulScalar(0.5, Vec2Add(v1, v2))
-		manifold.Points[0].LocalPoint = circleB.pos
+		manifold.Points[0].LocalPoint = circleB.Pos
 		manifold.Points[0].Id.SetKey(0)
 		return
 	}
@@ -89,7 +89,7 @@ func collidePolygonAndCircle(manifold *Manifold, polygonA *PolygonShape, xfA Tra
 		manifold.LocalNormal = Vec2Sub(cLocal, v1)
 		manifold.LocalNormal.Normalize()
 		manifold.LocalPoint = v1
-		manifold.Points[0].LocalPoint = circleB.pos
+		manifold.Points[0].LocalPoint = circleB.Pos
 		manifold.Points[0].Id.SetKey(0)
 	} else if u2 <= 0.0 {
 		if Vec2DistanceSquared(cLocal, v2) > radius*radius {
@@ -101,7 +101,7 @@ func collidePolygonAndCircle(manifold *Manifold, polygonA *PolygonShape, xfA Tra
 		manifold.LocalNormal = Vec2Sub(cLocal, v2)
 		manifold.LocalNormal.Normalize()
 		manifold.LocalPoint = v2
-		manifold.Points[0].LocalPoint = circleB.pos
+		manifold.Points[0].LocalPoint = circleB.Pos
 		manifold.Points[0].Id.SetKey(0)
 	} else {
 		faceCenter := Vec2MulScalar(0.5, Vec2Add(v1, v2))
@@ -114,7 +114,7 @@ func collidePolygonAndCircle(manifold *Manifold, polygonA *PolygonShape, xfA Tra
 		manifold.Type = FaceA
 		manifold.LocalNormal = normals[vertIndex1]
 		manifold.LocalPoint = faceCenter
-		manifold.Points[0].LocalPoint = circleB.pos
+		manifold.Points[0].LocalPoint = circleB.Pos
 		manifold.Points[0].Id.SetKey(0)
 	}
 }

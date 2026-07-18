@@ -90,7 +90,7 @@ func findIncidentEdge(c []ClipVertex, poly1 *PolygonShape, xf1 Transform, edge1 
 func collidePolygons(manifold *Manifold, polyA *PolygonShape, xfA Transform, polyB *PolygonShape, xfB Transform) {
 
 	manifold.PointCount = 0
-	totalRadius := polyA.radius + polyB.radius
+	totalRadius := polyA.Radius + polyB.Radius
 
 	edgeA := 0
 	separationA := findMaxSeparation(&edgeA, polyA, xfA, polyB, xfB)

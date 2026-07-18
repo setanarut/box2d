@@ -74,21 +74,21 @@ type IShape interface {
 }
 
 type Shape struct {
-	shapeType ShapeType
+	ShapeType ShapeType
 	// Radius of a shape. For polygonal shapes this must be b2_polygonRadius. There is no support for
 	// making rounded polygons.
-	radius float64
+	Radius float64
 }
 
 func (shape Shape) GetType() ShapeType {
-	return shape.shapeType
+	return shape.ShapeType
 }
 
 func (shape Shape) GetRadius() float64 {
-	return shape.radius
+	return shape.Radius
 }
 
 // @addedgo
 func (shape *Shape) SetRadius(r float64) {
-	shape.radius = r
+	shape.Radius = r
 }

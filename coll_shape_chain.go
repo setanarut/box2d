@@ -23,8 +23,8 @@ type ChainShape struct {
 func MakeChainShape() ChainShape {
 	return ChainShape{
 		Shape: Shape{
-			shapeType: Chain,
-			radius:    PolygonRadius,
+			ShapeType: Chain,
+			Radius:    PolygonRadius,
 		},
 		M_vertices: nil,
 		M_count:    0,
@@ -101,8 +101,8 @@ func (chain ChainShape) GetChildCount() int {
 func (chain ChainShape) GetChildEdge(edge *EdgeShape, index int) {
 	assert(0 <= index && index < chain.M_count-1)
 
-	edge.shapeType = Edge
-	edge.radius = chain.radius
+	edge.ShapeType = Edge
+	edge.Radius = chain.Radius
 
 	edge.M_vertex1 = chain.M_vertices[index+0]
 	edge.M_vertex2 = chain.M_vertices[index+1]
@@ -157,7 +157,7 @@ func (chain ChainShape) ComputeAABB(aabb *AABB, xf Transform, childIndex int) {
 	lower := Vec2Min(v1, v2)
 	upper := Vec2Max(v1, v2)
 
-	r := Vec2{chain.radius, chain.radius}
+	r := Vec2{chain.Radius, chain.Radius}
 	aabb.LowerBound = Vec2Sub(lower, r)
 	aabb.UpperBound = Vec2Add(upper, r)
 }

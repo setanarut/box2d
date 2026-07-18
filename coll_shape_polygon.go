@@ -16,8 +16,8 @@ type PolygonShape struct {
 func MakePolygonShape() PolygonShape {
 	return PolygonShape{
 		Shape: Shape{
-			shapeType: Polygon,
-			radius:    PolygonRadius,
+			ShapeType: Polygon,
+			Radius:    PolygonRadius,
 		},
 	}
 }
@@ -268,7 +268,7 @@ func (poly PolygonShape) ComputeAABB(aabb *AABB, xf Transform, childIndex int) {
 		upper = Vec2Max(upper, v)
 	}
 
-	r := Vec2{poly.radius, poly.radius}
+	r := Vec2{poly.Radius, poly.Radius}
 	aabb.LowerBound = Vec2Sub(lower, r)
 	aabb.UpperBound = Vec2Sub(upper, r)
 }

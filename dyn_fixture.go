@@ -366,15 +366,15 @@ func (fix *Fixture) Dump(bodyIndex int) {
 		{
 			s := fix.shape.(*CircleShape)
 			fmt.Print(fmt.Printf("    b2CircleShape shape;\n"))
-			fmt.Print(fmt.Printf("    shape.m_radius = %.15f;\n", s.radius))
-			fmt.Print(fmt.Printf("    shape.m_p.Set(%.15f, %.15f);\n", s.pos.X, s.pos.Y))
+			fmt.Print(fmt.Printf("    shape.m_radius = %.15f;\n", s.Radius))
+			fmt.Print(fmt.Printf("    shape.m_p.Set(%.15f, %.15f);\n", s.Pos.X, s.Pos.Y))
 		}
 
 	case Edge:
 		{
 			s := fix.shape.(*EdgeShape)
 			fmt.Print(fmt.Printf("    b2EdgeShape shape;\n"))
-			fmt.Print(fmt.Printf("    shape.m_radius = %.15f;\n", s.radius))
+			fmt.Print(fmt.Printf("    shape.m_radius = %.15f;\n", s.Radius))
 			fmt.Print(fmt.Printf("    shape.m_vertex0.Set(%.15f, %.15f);\n", s.M_vertex0.X, s.M_vertex0.Y))
 			fmt.Print(fmt.Printf("    shape.m_vertex1.Set(%.15f, %.15f);\n", s.M_vertex1.X, s.M_vertex1.Y))
 			fmt.Print(fmt.Printf("    shape.m_vertex2.Set(%.15f, %.15f);\n", s.M_vertex2.X, s.M_vertex2.Y))

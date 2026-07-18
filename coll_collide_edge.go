@@ -10,7 +10,7 @@ func collideEdgeAndCircle(manifold *Manifold, edgeA *EdgeShape, xfA Transform, c
 	manifold.PointCount = 0
 
 	// Compute circle in frame of edge
-	Q := TransformVec2MulT(xfA, TransformVec2Mul(xfB, circleB.pos))
+	Q := TransformVec2MulT(xfA, TransformVec2Mul(xfB, circleB.Pos))
 
 	A := edgeA.M_vertex1
 	B := edgeA.M_vertex2
@@ -29,7 +29,7 @@ func collideEdgeAndCircle(manifold *Manifold, edgeA *EdgeShape, xfA Transform, c
 	u := Vec2Dot(e, Vec2Sub(B, Q))
 	v := Vec2Dot(e, Vec2Sub(Q, A))
 
-	radius := edgeA.radius + circleB.radius
+	radius := edgeA.Radius + circleB.Radius
 
 	cf := ContactFeature{}
 	cf.IndexB = 0
@@ -68,7 +68,7 @@ func collideEdgeAndCircle(manifold *Manifold, edgeA *EdgeShape, xfA Transform, c
 		manifold.Points[0].Id.IndexB = cf.IndexB
 		manifold.Points[0].Id.TypeA = cf.TypeA
 		manifold.Points[0].Id.TypeB = cf.TypeB
-		manifold.Points[0].LocalPoint = circleB.pos
+		manifold.Points[0].LocalPoint = circleB.Pos
 		return
 	}
 
@@ -105,7 +105,7 @@ func collideEdgeAndCircle(manifold *Manifold, edgeA *EdgeShape, xfA Transform, c
 		manifold.Points[0].Id.IndexB = cf.IndexB
 		manifold.Points[0].Id.TypeA = cf.TypeA
 		manifold.Points[0].Id.TypeB = cf.TypeB
-		manifold.Points[0].LocalPoint = circleB.pos
+		manifold.Points[0].LocalPoint = circleB.Pos
 		return
 	}
 
@@ -135,7 +135,7 @@ func collideEdgeAndCircle(manifold *Manifold, edgeA *EdgeShape, xfA Transform, c
 	manifold.Points[0].Id.IndexB = cf.IndexB
 	manifold.Points[0].Id.TypeA = cf.TypeA
 	manifold.Points[0].Id.TypeB = cf.TypeB
-	manifold.Points[0].LocalPoint = circleB.pos
+	manifold.Points[0].LocalPoint = circleB.Pos
 }
 
 // This structure is used to keep track of the best separating axis.
@@ -267,7 +267,7 @@ func CollideEdgeAndPolygon(manifold *Manifold, edgeA *EdgeShape, xfA Transform, 
 		tempPolygonB.Normals[i] = RotVec2Mul(xf.Q, polygonB.Normals[i])
 	}
 
-	radius := polygonB.radius + edgeA.radius
+	radius := polygonB.Radius + edgeA.Radius
 
 	edgeAxis := ComputeEdgeSeparation(tempPolygonB, v1, normal1)
 	if edgeAxis.Separation > radius {

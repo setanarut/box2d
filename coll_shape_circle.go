@@ -7,13 +7,13 @@ import (
 // A solid circle shape
 type CircleShape struct {
 	Shape
-	pos Vec2
+	Pos Vec2
 }
 
 func MakeCircleShape() CircleShape {
 	return CircleShape{
 		Shape: Shape{
-			shapeType: Circle,
+			ShapeType: Circle,
 		},
 	}
 }
@@ -27,8 +27,8 @@ func NewCircleShape() *CircleShape {
 
 func (shape CircleShape) Clone() IShape {
 	clone := NewCircleShape()
-	clone.radius = shape.radius
-	clone.pos = shape.pos
+	clone.Radius = shape.Radius
+	clone.Pos = shape.Pos
 	return clone
 }
 
@@ -37,9 +37,9 @@ func (shape CircleShape) GetChildCount() int {
 }
 
 func (shape CircleShape) TestPoint(transform Transform, p Vec2) bool {
-	center := Vec2Add(transform.P, RotVec2Mul(transform.Q, shape.pos))
+	center := Vec2Add(transform.P, RotVec2Mul(transform.Q, shape.Pos))
 	d := Vec2Sub(p, center)
-	return Vec2Dot(d, d) <= shape.radius*shape.radius
+	return Vec2Dot(d, d) <= shape.Radius*shape.Radius
 }
 
 // Collision Detection in Interactive 3D Environments by Gino van den Bergen
@@ -51,9 +51,9 @@ func (shape CircleShape) TestPoint(transform Transform, p Vec2) bool {
 // not defined.
 func (shape CircleShape) RayCast(output *RayCastOutput, input RayCastInput, transform Transform, childIndex int) bool {
 
-	position := Vec2Add(transform.P, RotVec2Mul(transform.Q, shape.pos))
+	position := Vec2Add(transform.P, RotVec2Mul(transform.Q, shape.Pos))
 	s := Vec2Sub(input.P1, position)
-	b := Vec2Dot(s, s) - shape.radius*shape.radius
+	b := Vec2Dot(s, s) - shape.Radius*shape.Radius
 
 	// Solve quadratic equation.
 	r := Vec2Sub(input.P2, input.P1)
@@ -82,17 +82,17 @@ func (shape CircleShape) RayCast(output *RayCastOutput, input RayCastInput, tran
 }
 
 func (shape CircleShape) ComputeAABB(aabb *AABB, transform Transform, childIndex int) {
-	p := Vec2Add(transform.P, RotVec2Mul(transform.Q, shape.pos))
-	aabb.LowerBound.Set(p.X-shape.radius, p.Y-shape.radius)
-	aabb.UpperBound.Set(p.X+shape.radius, p.Y+shape.radius)
+	p := Vec2Add(transform.P, RotVec2Mul(transform.Q, shape.Pos))
+	aabb.LowerBound.Set(p.X-shape.Radius, p.Y-shape.Radius)
+	aabb.UpperBound.Set(p.X+shape.Radius, p.Y+shape.Radius)
 }
 
 func (shape CircleShape) ComputeMass(massData *MassData, density float64) {
-	massData.Mass = density * pi * shape.radius * shape.radius
-	massData.Center = shape.pos
+	massData.Mass = density * pi * shape.Radius * shape.Radius
+	massData.Center = shape.Pos
 
 	// inertia about the local origin
-	massData.I = massData.Mass * (0.5*shape.radius*shape.radius + Vec2Dot(shape.pos, shape.pos))
+	massData.I = massData.Mass * (0.5*shape.Radius*shape.Radius + Vec2Dot(shape.Pos, shape.Pos))
 }
 
 func (shape CircleShape) Destroy() {}

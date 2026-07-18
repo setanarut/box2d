@@ -18,8 +18,8 @@ type EdgeShape struct {
 func MakeEdgeShape() EdgeShape {
 	return EdgeShape{
 		Shape: Shape{
-			shapeType: Edge,
-			radius:    PolygonRadius,
+			ShapeType: Edge,
+			Radius:    PolygonRadius,
 		},
 	}
 }
@@ -138,7 +138,7 @@ func (edge EdgeShape) ComputeAABB(aabb *AABB, xf Transform, childIndex int) {
 	lower := Vec2Min(v1, v2)
 	upper := Vec2Max(v1, v2)
 
-	r := Vec2{edge.radius, edge.radius}
+	r := Vec2{edge.Radius, edge.Radius}
 	aabb.LowerBound = Vec2Sub(lower, r)
 	aabb.UpperBound = Vec2Sub(upper, r)
 }

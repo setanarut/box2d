@@ -141,14 +141,14 @@ func (p *DistanceProxy) Set(shape IShape, index int) {
 	switch shape.GetType() {
 	case Circle:
 		circle := (shape).(*CircleShape)
-		p.M_vertices = []Vec2{circle.pos}
+		p.M_vertices = []Vec2{circle.Pos}
 		p.M_count = 1
-		p.M_radius = circle.radius
+		p.M_radius = circle.Radius
 	case Polygon:
 		polygon := shape.(*PolygonShape)
 		p.M_vertices = polygon.Vertices[:]
 		p.M_count = polygon.Count
-		p.M_radius = polygon.radius
+		p.M_radius = polygon.Radius
 	case Chain:
 		chain := shape.(*ChainShape)
 		assert(0 <= index && index < chain.M_count)
@@ -160,12 +160,12 @@ func (p *DistanceProxy) Set(shape IShape, index int) {
 		}
 		p.M_vertices = p.M_buffer[:]
 		p.M_count = 2
-		p.M_radius = chain.radius
+		p.M_radius = chain.Radius
 	case Edge:
 		edge := shape.(*EdgeShape)
 		p.M_vertices = []Vec2{edge.M_vertex1, edge.M_vertex2}
 		p.M_count = 2
-		p.M_radius = edge.radius
+		p.M_radius = edge.Radius
 	default:
 		assert(false)
 	}
